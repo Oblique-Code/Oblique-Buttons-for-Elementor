@@ -70,6 +70,7 @@ class Widget_Button extends Widget_Base {
 		$this->register_content_controls();
 		$this->register_preset_controls();
 		$this->register_style_controls();
+		$this->register_icon_style_controls();
 		$this->register_animation_controls();
 	}
 
@@ -171,6 +172,11 @@ class Widget_Button extends Widget_Base {
 						'min' => 0,
 						'max' => 60,
 					),
+					'em' => array(
+						'min' => 0,
+						'max' => 4,
+						'step' => 0.1,
+					),
 				),
 				'selectors'  => array(
 					'{{WRAPPER}} .oblique-button' => '--ob-btn-icon-gap: {{SIZE}}{{UNIT}};',
@@ -204,6 +210,89 @@ class Widget_Button extends Widget_Base {
 		$this->end_controls_section();
 	}
 
+	private function register_icon_style_controls(): void {
+		$this->start_controls_section(
+			'section_style_icon',
+			array(
+				'label'     => esc_html__( 'Icon', 'oblique-buttons-for-elementor' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => array( 'icon[value]!' => '' ),
+			)
+		);
+
+		$this->add_responsive_control(
+			'icon_size',
+			array(
+				'label'      => esc_html__( 'Icon Size', 'oblique-buttons-for-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'range'      => array(
+					'px'  => array(
+						'min' => 6,
+						'max' => 100,
+					),
+					'em'  => array(
+						'min'  => 0.1,
+						'max'  => 5,
+						'step' => 0.1,
+					),
+					'rem' => array(
+						'min'  => 0.1,
+						'max'  => 5,
+						'step' => 0.1,
+					),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .oblique-button' => '--ob-btn-icon-size: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'icon_color',
+			array(
+				'label'       => esc_html__( 'Icon Color', 'oblique-buttons-for-elementor' ),
+				'type'        => Controls_Manager::COLOR,
+				'description' => esc_html__( 'Leave empty to match the button text color.', 'oblique-buttons-for-elementor' ),
+				'selectors'   => array(
+					'{{WRAPPER}} .oblique-button' => '--ob-btn-icon-color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'icon_color_hover',
+			array(
+				'label'     => esc_html__( 'Icon Color (Hover)', 'oblique-buttons-for-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .oblique-button:hover' => '--ob-btn-icon-color: {{VALUE}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'icon_vertical_offset',
+			array(
+				'label'      => esc_html__( 'Vertical Offset', 'oblique-buttons-for-elementor' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array(
+						'min' => -20,
+						'max' => 20,
+					),
+				),
+				'description' => esc_html__( 'Nudge the icon up or down to optically align it with the text.', 'oblique-buttons-for-elementor' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .oblique-button' => '--ob-btn-icon-offset-y: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+	}
+
 	private function register_style_controls(): void {
 		$this->start_controls_section(
 			'section_style_button',
@@ -225,7 +314,7 @@ class Widget_Button extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			array(
-				'label'     => esc_html__( 'Alignment', 'oblique-buttons-for-elementor' ),
+				'label'     => esc_html__( 'Button Position', 'oblique-buttons-for-elementor' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => array(
 					'left'   => array(
@@ -245,6 +334,8 @@ class Widget_Button extends Widget_Base {
 				'selectors' => array(
 					'{{WRAPPER}}' => 'text-align: {{VALUE}};',
 				),
+				// Meaningless when the button already spans the full width.
+				'condition' => array( 'width_type!' => 'full' ),
 				'separator' => 'before',
 			)
 		);
@@ -338,6 +429,10 @@ class Widget_Button extends Widget_Base {
 						'min' => 0,
 						'max' => 600,
 					),
+					'%'  => array(
+						'min' => 0,
+						'max' => 100,
+					),
 				),
 				'selectors'  => array(
 					'{{WRAPPER}} .oblique-button' => 'min-width: {{SIZE}}{{UNIT}};',
@@ -345,24 +440,87 @@ class Widget_Button extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'width_type',
+			array(
+				'label'        => esc_html__( 'Width', 'oblique-buttons-for-elementor' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'auto',
+				'options'      => array(
+					'auto'   => esc_html__( 'Auto (fit content)', 'oblique-buttons-for-elementor' ),
+					'full'   => esc_html__( 'Full Width', 'oblique-buttons-for-elementor' ),
+					'custom' => esc_html__( 'Custom', 'oblique-buttons-for-elementor' ),
+				),
+				// A wrapper class rather than a selector, so the Full Width
+				// rule and the Custom slider below can never both target the
+				// same element at the same time and fight over specificity.
+				'prefix_class' => 'oblique-btn-width-',
+			)
+		);
+
 		$this->add_responsive_control(
 			'width',
 			array(
-				'label'      => esc_html__( 'Width', 'oblique-buttons-for-elementor' ),
+				'label'      => esc_html__( 'Custom Width', 'oblique-buttons-for-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', '%' ),
+				'size_units' => array( 'px', '%', 'em', 'rem', 'vw' ),
 				'range'      => array(
-					'px' => array(
+					'px'  => array(
 						'min' => 0,
-						'max' => 600,
+						'max' => 800,
 					),
-					'%'  => array(
+					'%'   => array(
+						'min' => 0,
+						'max' => 100,
+					),
+					'em'  => array(
+						'min'  => 0,
+						'max'  => 50,
+						'step' => 0.1,
+					),
+					'rem' => array(
+						'min'  => 0,
+						'max'  => 50,
+						'step' => 0.1,
+					),
+					'vw'  => array(
 						'min' => 0,
 						'max' => 100,
 					),
 				),
 				'selectors'  => array(
 					'{{WRAPPER}} .oblique-button' => 'width: {{SIZE}}{{UNIT}};',
+				),
+				'condition'  => array( 'width_type' => 'custom' ),
+			)
+		);
+
+		$this->add_responsive_control(
+			'content_align',
+			array(
+				'label'       => esc_html__( 'Text Alignment', 'oblique-buttons-for-elementor' ),
+				'type'        => Controls_Manager::CHOOSE,
+				'options'     => array(
+					'flex-start'    => array(
+						'title' => esc_html__( 'Start', 'oblique-buttons-for-elementor' ),
+						'icon'  => 'eicon-text-align-left',
+					),
+					'center'        => array(
+						'title' => esc_html__( 'Center', 'oblique-buttons-for-elementor' ),
+						'icon'  => 'eicon-text-align-center',
+					),
+					'flex-end'      => array(
+						'title' => esc_html__( 'End', 'oblique-buttons-for-elementor' ),
+						'icon'  => 'eicon-text-align-right',
+					),
+					'space-between' => array(
+						'title' => esc_html__( 'Space Between', 'oblique-buttons-for-elementor' ),
+						'icon'  => 'eicon-text-align-justify',
+					),
+				),
+				'description' => esc_html__( 'Positions the text and icon inside the button. Only has a visible effect when the button is wider than its content (Full Width, Custom Width, or a Minimum Width).', 'oblique-buttons-for-elementor' ),
+				'selectors'   => array(
+					'{{WRAPPER}} .oblique-button' => 'justify-content: {{VALUE}};',
 				),
 			)
 		);
@@ -646,15 +804,15 @@ class Widget_Button extends Widget_Base {
 
 		$icon_html = '';
 		if ( $has_icon ) {
+			// The icon is wrapped in a span rather than styled directly:
+			// Icons_Manager puts the class we pass onto whatever element it
+			// emits, which is an <i> in font mode but the <svg> itself in
+			// SVG mode (and for uploaded SVGs). Sizing and coloring that
+			// element directly is therefore unreliable, so all icon styling
+			// targets this wrapper and cascades inward instead.
 			ob_start();
-			Icons_Manager::render_icon(
-				$settings['icon'],
-				array(
-					'aria-hidden' => 'true',
-					'class'       => 'oblique-button__icon',
-				)
-			);
-			$icon_html = ob_get_clean();
+			Icons_Manager::render_icon( $settings['icon'], array( 'aria-hidden' => 'true' ) );
+			$icon_html = '<span class="oblique-button__icon">' . ob_get_clean() . '</span>';
 		}
 
 		$text_html = $has_text ? '<span class="oblique-button__text">' . esc_html( $settings['text'] ) . '</span>' : '';

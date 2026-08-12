@@ -21,9 +21,12 @@
 	--ob-btn-border-width: 0px;
 	--ob-btn-border-style: solid;
 	--ob-btn-icon-gap: 8px;
+	--ob-btn-icon-size: 1em;
+	--ob-btn-icon-offset-y: 0px;
 	--ob-btn-transition-duration: 0.2s;
 	--ob-btn-focus-outline-color: #1578ed;
 
+	box-sizing: border-box;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -37,6 +40,7 @@
 	text-decoration: none;
 	line-height: 1.2;
 	vertical-align: middle;
+	margin: 0;
 	transition-property: background, color, border-color, box-shadow, transform, opacity;
 	transition-duration: var(--ob-btn-transition-duration);
 	transition-timing-function: ease;
@@ -47,6 +51,15 @@ button.oblique-button {
 	appearance: none;
 	-webkit-appearance: none;
 	font: inherit;
+}
+
+/* Firefox adds a phantom ~2px inset and a second focus ring inside
+   <button> elements; without this, a bordered preset (Outline, Border
+   Draw, or a user-set border) looks visibly thicker/misaligned in
+   Firefox than the exact same button rendered as an <a>. */
+button.oblique-button::-moz-focus-inner {
+	border: 0;
+	padding: 0;
 }
 
 /* Generic fallback interactivity when neither a preset nor a user control
@@ -65,17 +78,53 @@ button.oblique-button {
 	outline-offset: 2px;
 }
 
+/* Width
+ *
+ * "Full Width" is applied through a wrapper class rather than through
+ * Elementor's per-instance CSS, so it can never collide with the Custom
+ * Width slider — only one of the two can be active at a time. */
+.oblique-btn-width-full .oblique-button {
+	width: 100%;
+}
+
+/* Icon
+ *
+ * All icon styling targets this wrapper span, never the icon element
+ * itself: Elementor emits an <i> in font mode but a bare <svg> in SVG
+ * mode (and for uploaded SVGs), so the inner element's tag is not
+ * something we can rely on. Sizing via font-size lets `em`-based icons,
+ * font icons, and SVGs all scale from one value. */
 .oblique-button__icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	line-height: 0;
+	flex-shrink: 0;
+	font-size: var(--ob-btn-icon-size);
+	color: var(--ob-btn-icon-color, inherit);
+	/* Offset via position, not transform: the icon animations in
+	   animations.css own the transform property, and a transform here
+	   would silently cancel them out. */
+	position: relative;
+	top: var(--ob-btn-icon-offset-y);
 	transition: transform var(--ob-btn-transition-duration) ease;
 }
 
 .oblique-button__icon svg {
 	width: 1em;
 	height: 1em;
+	fill: currentColor;
+	display: block;
+}
+
+.oblique-button__icon i {
+	font-size: inherit;
+	line-height: 1;
+	width: auto;
+	height: auto;
+}
+
+.oblique-button__text {
+	display: inline-block;
 }
 
 /* -----------------------------------------------------------------------
