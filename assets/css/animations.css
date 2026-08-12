@@ -1,0 +1,87 @@
+/*
+ * Oblique Button — animation add-ons.
+ *
+ * Only enqueued when a widget instance actually uses a hover/icon/active
+ * animation (see Widget_Button::get_style_depends()). Every transform here
+ * is skipped under prefers-reduced-motion.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button[data-ob-hover-fx='grow']:hover {
+		transform: scale( 1.05 );
+	}
+
+	.oblique-button[data-ob-hover-fx='shrink']:hover {
+		transform: scale( 0.95 );
+	}
+
+	.oblique-button[data-ob-hover-fx='lift']:hover {
+		transform: translateY( -3px );
+	}
+
+	.oblique-button[data-ob-hover-fx='press']:active {
+		transform: scale( 0.96 );
+	}
+
+	.oblique-button[data-ob-hover-fx='rotate']:hover {
+		transform: rotate( -2deg );
+	}
+
+	.oblique-button[data-ob-hover-fx='skew']:hover {
+		transform: skewX( -6deg );
+	}
+
+	.oblique-button[data-ob-active-fx='grow']:active {
+		transform: scale( 1.05 );
+	}
+
+	.oblique-button[data-ob-active-fx='shrink']:active {
+		transform: scale( 0.95 );
+	}
+
+	.oblique-button[data-ob-icon-fx='move-right']:hover .oblique-button__icon {
+		transform: translateX( 4px );
+	}
+
+	.oblique-button[data-ob-icon-fx='move-left']:hover .oblique-button__icon {
+		transform: translateX( -4px );
+	}
+
+	.oblique-button[data-ob-icon-fx='move-up']:hover .oblique-button__icon {
+		transform: translateY( -4px );
+	}
+
+	.oblique-button[data-ob-icon-fx='move-down']:hover .oblique-button__icon {
+		transform: translateY( 4px );
+	}
+
+	.oblique-button[data-ob-icon-fx='rotate']:hover .oblique-button__icon {
+		transform: rotate( 90deg );
+	}
+
+	.oblique-button[data-ob-icon-fx='bounce']:hover .oblique-button__icon {
+		animation: ob-btn-bounce 0.5s ease;
+	}
+
+	.oblique-button[data-ob-icon-fx='scale']:hover .oblique-button__icon {
+		transform: scale( 1.25 );
+	}
+
+	@keyframes ob-btn-bounce {
+		0%,
+		100% {
+			transform: translateY( 0 );
+		}
+		50% {
+			transform: translateY( -4px );
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.oblique-button,
+	.oblique-button__icon {
+		transition: none !important;
+		animation: none !important;
+	}
+}

@@ -28,6 +28,10 @@ final class Plugin {
 			return;
 		}
 
+		require_once OBLIQUE_BUTTONS_PATH . 'includes/Assets/Asset_Manager.php';
+
+		( new Assets\Asset_Manager() )->register();
+
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
 	}
 
@@ -54,6 +58,8 @@ final class Plugin {
 	}
 
 	public function register_widgets( $widgets_manager ): void {
+		require_once OBLIQUE_BUTTONS_PATH . 'includes/Presets/Preset_Registry.php';
+		require_once OBLIQUE_BUTTONS_PATH . 'includes/Presets/Preset_Manager.php';
 		require_once OBLIQUE_BUTTONS_PATH . 'includes/Elementor/Widget_Button.php';
 
 		$widgets_manager->register( new Elementor\Widget_Button() );

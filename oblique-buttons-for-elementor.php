@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name:       Oblique Buttons for Elementor
- * Plugin URI:        https://obliqueui.com/buttons-for-elementor
+ * Plugin URI:        https://github.com/Oblique-Code/Oblique-Buttons-for-Elementor
  * Description:       Professionally designed, ready-made Elementor button presets combined with complete customization.
  * Version:           0.1.0
- * Author:            Oblique UI
+ * Author:            Oblique Code
  * Text Domain:       oblique-buttons-for-elementor
  * Domain Path:       /languages
  * Requires PHP:      7.4

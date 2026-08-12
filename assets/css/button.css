@@ -1,0 +1,233 @@
+/*
+ * Oblique Button — base styles.
+ *
+ * Simple, reusable tokens (color, radius, spacing, border) read from
+ * `--ob-btn-*` custom properties with a base fallback. Presets set those
+ * variables on their own `.oblique-button--preset-*` class and define their
+ * own :hover/:focus/:active rules directly. Elementor writes per-instance
+ * rules on the exact button element (`{{WRAPPER}} .oblique-button...`),
+ * which always has higher specificity than a bare preset class, so a
+ * user's control value always wins over the selected preset, and a preset
+ * always wins over these base defaults — with no JavaScript required.
+ */
+
+.oblique-button {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 8px;
+	--ob-btn-padding-y: 14px;
+	--ob-btn-padding-x: 28px;
+	--ob-btn-border-color: transparent;
+	--ob-btn-border-width: 0px;
+	--ob-btn-border-style: solid;
+	--ob-btn-icon-gap: 8px;
+	--ob-btn-transition-duration: 0.2s;
+	--ob-btn-focus-outline-color: #1578ed;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ob-btn-icon-gap);
+	background: var(--ob-btn-bg);
+	color: var(--ob-btn-color);
+	border-radius: var(--ob-btn-radius);
+	padding: var(--ob-btn-padding-y) var(--ob-btn-padding-x);
+	border: var(--ob-btn-border-width) var(--ob-btn-border-style) var(--ob-btn-border-color);
+	cursor: pointer;
+	text-decoration: none;
+	line-height: 1.2;
+	vertical-align: middle;
+	transition-property: background, color, border-color, box-shadow, transform, opacity;
+	transition-duration: var(--ob-btn-transition-duration);
+	transition-timing-function: ease;
+}
+
+a.oblique-button,
+button.oblique-button {
+	appearance: none;
+	-webkit-appearance: none;
+	font: inherit;
+}
+
+/* Generic fallback interactivity when neither a preset nor a user control
+   has defined explicit hover/active styling for this instance. */
+.oblique-button:hover {
+	opacity: 0.92;
+}
+
+.oblique-button:active {
+	opacity: 0.85;
+}
+
+.oblique-button:focus-visible,
+.oblique-button:focus {
+	outline: 2px solid var(--ob-btn-focus-outline-color);
+	outline-offset: 2px;
+}
+
+.oblique-button__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 0;
+	transition: transform var(--ob-btn-transition-duration) ease;
+}
+
+.oblique-button__icon svg {
+	width: 1em;
+	height: 1em;
+}
+
+/* -----------------------------------------------------------------------
+ * Presets
+ *
+ * Each preset sets the base variables it needs and its own state rules.
+ * Anything left unset falls back to the defaults above.
+ * --------------------------------------------------------------------- */
+
+.oblique-button--preset-primary {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+}
+.oblique-button--preset-primary:hover {
+	background: #1264c7;
+	opacity: 1;
+}
+
+.oblique-button--preset-secondary {
+	--ob-btn-bg: #6b7280;
+	--ob-btn-color: #ffffff;
+}
+.oblique-button--preset-secondary:hover {
+	background: #565b63;
+	opacity: 1;
+}
+
+.oblique-button--preset-dark {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+}
+.oblique-button--preset-dark:hover {
+	background: #000000;
+	opacity: 1;
+}
+
+.oblique-button--preset-light {
+	--ob-btn-bg: #f3f4f6;
+	--ob-btn-color: #111827;
+}
+.oblique-button--preset-light:hover {
+	background: #e5e7eb;
+	opacity: 1;
+}
+
+.oblique-button--preset-gradient {
+	--ob-btn-color: #ffffff;
+	background-image: linear-gradient(135deg, #6366f1, #ec4899);
+	border: 0;
+}
+.oblique-button--preset-gradient:hover {
+	filter: brightness(0.92);
+	opacity: 1;
+}
+
+.oblique-button--preset-outline {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #1578ed;
+	--ob-btn-border-color: #1578ed;
+	--ob-btn-border-width: 2px;
+}
+.oblique-button--preset-outline:hover {
+	background: #1578ed;
+	color: #ffffff;
+	opacity: 1;
+}
+
+.oblique-button--preset-rounded-outline {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #1578ed;
+	--ob-btn-border-color: #1578ed;
+	--ob-btn-border-width: 2px;
+	--ob-btn-radius: 999px;
+}
+.oblique-button--preset-rounded-outline:hover {
+	background: #1578ed;
+	color: #ffffff;
+	opacity: 1;
+}
+
+.oblique-button--preset-pill {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 999px;
+}
+.oblique-button--preset-pill:hover {
+	background: #1264c7;
+	opacity: 1;
+}
+
+.oblique-button--preset-soft-shadow {
+	--ob-btn-bg: #ffffff;
+	--ob-btn-color: #111827;
+	box-shadow: 0 10px 25px rgba(17, 24, 39, 0.12);
+}
+.oblique-button--preset-soft-shadow:hover {
+	box-shadow: 0 14px 32px rgba(17, 24, 39, 0.18);
+	opacity: 1;
+}
+
+.oblique-button--preset-arrow-reveal {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+}
+.oblique-button--preset-arrow-reveal:hover {
+	background: #000000;
+	opacity: 1;
+}
+.oblique-button--preset-arrow-reveal:hover .oblique-button__icon {
+	transform: translateX(4px);
+}
+
+.oblique-button--preset-shine {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+}
+.oblique-button--preset-shine:hover {
+	opacity: 1;
+}
+.oblique-button--preset-shine::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -75%;
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+	transform: skewX(-20deg);
+	transition: left 0.6s ease;
+}
+.oblique-button--preset-shine:hover::after {
+	left: 125%;
+}
+
+.oblique-button--preset-border-draw {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #1578ed;
+	--ob-btn-border-color: rgba(21, 120, 237, 0.3);
+	--ob-btn-border-width: 2px;
+}
+.oblique-button--preset-border-draw:hover {
+	border-color: #1578ed;
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.oblique-button,
+	.oblique-button__icon,
+	.oblique-button::after {
+		transition: none !important;
+	}
+}
