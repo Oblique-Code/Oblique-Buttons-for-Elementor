@@ -1,0 +1,41 @@
+/*
+ * Oblique Button Group - layout only.
+ *
+ * The buttons inside are ordinary .oblique-button elements, so every
+ * preset, effect and surface behaves exactly as it does in the single
+ * Button widget. Nothing here restyles a button.
+ */
+
+.oblique-button-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+/* Stacking
+ *
+ * Uses Elementor's own default breakpoints so the group matches the
+ * device switcher in the editor. */
+@media (max-width: 1024px) {
+	.oblique-group-stack-tablet .oblique-button-group {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.oblique-group-stack-tablet .oblique-button-group .oblique-button {
+		width: 100%;
+		flex: 0 0 auto;
+	}
+}
+
+@media (max-width: 767px) {
+	.oblique-group-stack-mobile .oblique-button-group {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.oblique-group-stack-mobile .oblique-button-group .oblique-button {
+		width: 100%;
+		flex: 0 0 auto;
+	}
+}

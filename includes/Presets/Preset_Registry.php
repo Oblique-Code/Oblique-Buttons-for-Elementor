@@ -9,15 +9,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Loads button preset definitions from includes/Presets/presets/*.php.
  *
- * Presets are pure metadata (id, name, category) - the visual appearance of
- * each preset lives in assets/css/button.css as a `.oblique-button--preset-*`
- * class. Adding a preset means adding a data entry here and a CSS rule,
- * never touching the widget itself. See section 6 of
- * oblique-buttons-for-elementor.md.
+ * A preset is pure metadata. Its base look lives in assets/css/button.css as
+ * a `.oblique-button--preset-*` class, and any motion/surface it ships with
+ * is named here rather than hard-coded into that class:
+ *
+ *   id             (string) unique slug
+ *   name           (string) label shown in the panel
+ *   category       (string) one of CATEGORY_ORDER
+ *   hover_effect   (string) optional, e.g. 'shine' - the effect this preset
+ *                  ships with. The widget treats it as a default the user
+ *                  can override or switch off.
+ *   surface        (string) optional, e.g. 'glass' - as above, for surfaces.
+ *   icon_animation (string) optional default icon motion.
+ *
+ * Because effects are named rather than baked into the preset's CSS, the
+ * exact same effect CSS (and the same detailed style controls) serves both
+ * "the preset that ships with it" and "a user who applied it to any other
+ * preset". Adding a preset stays a data + one CSS rule task.
  */
 class Preset_Registry {
 
-	private const CATEGORY_ORDER = array( 'solid', 'outline', 'modern', 'animated' );
+	private const CATEGORY_ORDER = array( 'signature', 'solid', 'outline', 'modern', 'animated', 'creative' );
 
 	private static ?array $presets = null;
 
@@ -70,12 +82,71 @@ class Preset_Registry {
 		return null !== self::get( $id );
 	}
 
+	/**
+	 * Every preset id that ships with the given value for the given key.
+	 *
+	 * Used to build the editor conditions that reveal an effect's style
+	 * controls when the chosen preset already uses that effect.
+	 *
+	 * @return array<int, string>
+	 */
+	public static function get_ids_by( string $key, string $value ): array {
+		$ids = array();
+
+		foreach ( self::get_all() as $preset ) {
+			if ( isset( $preset[ $key ] ) && $preset[ $key ] === $value ) {
+				$ids[] = $preset['id'];
+			}
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Every preset id whose value for the given key starts with the prefix.
+	 *
+	 * Lets the directional fill effects ('fill-left', 'fill-right', ...) be
+	 * matched as one family.
+	 *
+	 * @return array<int, string>
+	 */
+	public static function get_ids_by_prefix( string $key, string $prefix ): array {
+		$ids = array();
+
+		foreach ( self::get_all() as $preset ) {
+			if ( isset( $preset[ $key ] ) && 0 === strpos( $preset[ $key ], $prefix ) ) {
+				$ids[] = $preset['id'];
+			}
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Every preset id whose metadata has a truthy value for the given flag.
+	 *
+	 * @return array<int, string>
+	 */
+	public static function get_ids_with( string $flag ): array {
+		$ids = array();
+
+		foreach ( self::get_all() as $preset ) {
+			if ( ! empty( $preset[ $flag ] ) ) {
+				$ids[] = $preset['id'];
+			}
+		}
+
+		return $ids;
+	}
+
 	public static function get_category_label( string $category ): string {
 		$labels = array(
 			'solid'    => esc_html__( 'Solid', 'oblique-buttons-for-elementor' ),
 			'outline'  => esc_html__( 'Outline', 'oblique-buttons-for-elementor' ),
 			'modern'   => esc_html__( 'Modern', 'oblique-buttons-for-elementor' ),
 			'animated' => esc_html__( 'Animated', 'oblique-buttons-for-elementor' ),
+			'creative' => esc_html__( 'Creative', 'oblique-buttons-for-elementor' ),
+			'signature' => esc_html__( 'Signature', 'oblique-buttons-for-elementor' ),
 		);
 
 		return $labels[ $category ] ?? ucfirst( $category );

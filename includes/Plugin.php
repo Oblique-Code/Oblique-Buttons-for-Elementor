@@ -61,8 +61,10 @@ final class Plugin {
 		require_once OBLIQUE_BUTTONS_PATH . 'includes/Presets/Preset_Registry.php';
 		require_once OBLIQUE_BUTTONS_PATH . 'includes/Presets/Preset_Manager.php';
 		require_once OBLIQUE_BUTTONS_PATH . 'includes/Elementor/Widget_Button.php';
+		require_once OBLIQUE_BUTTONS_PATH . 'includes/Elementor/Widget_Button_Group.php';
 
 		$widgets_manager->register( new Elementor\Widget_Button() );
+		$widgets_manager->register( new Elementor\Widget_Button_Group() );
 	}
 
 	public function notice_missing_elementor(): void {

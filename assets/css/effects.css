@@ -1,0 +1,315 @@
+/*
+ * Oblique Button - effects & surfaces.
+ *
+ * Every effect keys off a data attribute the widget renders
+ * (`data-ob-effect`, `data-ob-surface`) rather than off a preset class.
+ * That is deliberate: a preset only *names* the effect it ships with, so
+ * this one implementation - and the one set of style controls that feeds
+ * these variables - serves both the preset and any user who applies the
+ * same effect to a different preset.
+ *
+ * Every value below reads from a `--ob-fx-*` / `--ob-surface-*` variable
+ * with a sensible fallback, so each effect is fully customizable from the
+ * Elementor panel without writing CSS.
+ */
+
+.oblique-button[data-ob-effect],
+.oblique-button[data-ob-surface] {
+	--ob-fx-duration: 0.35s;
+	--ob-fx-easing: ease;
+}
+
+/* -----------------------------------------------------------------------
+ * Fill / slide background
+ *
+ * A pseudo-element wipes across the button from the chosen edge. The
+ * button's own background stays untouched underneath, so the effect
+ * composes with any preset or user background.
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-effect^='fill-'] {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+}
+
+.oblique-button[data-ob-effect^='fill-']::before {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	background: var(--ob-fx-fill-color, rgba(0, 0, 0, 0.25));
+	transition: transform var(--ob-fx-duration) var(--ob-fx-easing);
+	inset: 0;
+}
+
+.oblique-button[data-ob-effect='fill-left']::before {
+	transform: scaleX(0);
+	transform-origin: right center;
+}
+
+.oblique-button[data-ob-effect='fill-right']::before {
+	transform: scaleX(0);
+	transform-origin: left center;
+}
+
+.oblique-button[data-ob-effect='fill-up']::before {
+	transform: scaleY(0);
+	transform-origin: bottom center;
+}
+
+.oblique-button[data-ob-effect='fill-down']::before {
+	transform: scaleY(0);
+	transform-origin: top center;
+}
+
+.oblique-button[data-ob-effect='fill-center']::before {
+	transform: scaleX(0);
+	transform-origin: center center;
+}
+
+.oblique-button[data-ob-effect='fill-diagonal']::before {
+	transform: scale(0);
+	transform-origin: top left;
+}
+
+.oblique-button[data-ob-effect^='fill-']:hover::before,
+.oblique-button[data-ob-effect^='fill-']:focus-visible::before {
+	transform: scale(1);
+}
+
+.oblique-button[data-ob-effect^='fill-']:hover,
+.oblique-button[data-ob-effect^='fill-']:focus-visible {
+	color: var(--ob-fx-fill-text-color, var(--ob-btn-color));
+	opacity: 1;
+}
+
+/* -----------------------------------------------------------------------
+ * Shine
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-effect='shine'] {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+}
+
+.oblique-button[data-ob-effect='shine']:hover {
+	opacity: 1;
+}
+
+.oblique-button[data-ob-effect='shine']::after {
+	content: '';
+	position: absolute;
+	top: -25%;
+	left: -150%;
+	width: var(--ob-fx-shine-width, 50%);
+	height: 150%;
+	background: linear-gradient(
+		115deg,
+		transparent,
+		var(--ob-fx-shine-color, rgba(255, 255, 255, 0.45)),
+		transparent
+	);
+	transform: skewX(var(--ob-fx-shine-angle, -20deg));
+	transition: left var(--ob-fx-duration, 0.6s) var(--ob-fx-easing);
+	pointer-events: none;
+}
+
+.oblique-button[data-ob-effect='shine']:hover::after,
+.oblique-button[data-ob-effect='shine']:focus-visible::after {
+	left: 150%;
+}
+
+/* -----------------------------------------------------------------------
+ * Glow
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-effect='glow'] {
+	transition: box-shadow var(--ob-fx-duration) var(--ob-fx-easing),
+		background var(--ob-btn-transition-duration) ease,
+		color var(--ob-btn-transition-duration) ease;
+}
+
+.oblique-button[data-ob-effect='glow']:hover,
+.oblique-button[data-ob-effect='glow']:focus-visible {
+	box-shadow: 0 0 var(--ob-fx-glow-size, 18px) var(--ob-fx-glow-spread, 0px)
+		var(--ob-fx-glow-color, rgba(21, 120, 237, 0.75));
+	opacity: 1;
+}
+
+/* -----------------------------------------------------------------------
+ * Pulse
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-effect='pulse']:hover {
+	opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button[data-ob-effect='pulse']:hover,
+	.oblique-button[data-ob-effect='pulse']:focus-visible {
+		animation: ob-fx-pulse var(--ob-fx-duration, 1.2s) var(--ob-fx-easing) infinite;
+	}
+
+	@keyframes ob-fx-pulse {
+		0% {
+			box-shadow: 0 0 0 0 var(--ob-fx-pulse-color, rgba(21, 120, 237, 0.55));
+		}
+		70% {
+			box-shadow: 0 0 0 var(--ob-fx-pulse-size, 14px) transparent;
+		}
+		100% {
+			box-shadow: 0 0 0 0 transparent;
+		}
+	}
+}
+
+/* -----------------------------------------------------------------------
+ * Underline
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-effect='underline'] {
+	position: relative;
+}
+
+.oblique-button[data-ob-effect='underline']:hover {
+	opacity: 1;
+}
+
+.oblique-button[data-ob-effect='underline']::after {
+	content: '';
+	position: absolute;
+	left: var(--ob-btn-padding-x);
+	right: var(--ob-btn-padding-x);
+	bottom: var(--ob-fx-underline-offset, 8px);
+	height: var(--ob-fx-underline-thickness, 2px);
+	background: var(--ob-fx-underline-color, currentColor);
+	transform: scaleX(0);
+	transform-origin: var(--ob-fx-underline-origin, left) center;
+	transition: transform var(--ob-fx-duration) var(--ob-fx-easing);
+}
+
+.oblique-button[data-ob-effect='underline']:hover::after,
+.oblique-button[data-ob-effect='underline']:focus-visible::after {
+	transform: scaleX(1);
+}
+
+/* -----------------------------------------------------------------------
+ * Border draw
+ *
+ * Two mirrored pseudo-elements grow along the edges. Drawn as insets
+ * rather than as a real border so it never shifts the button's box.
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-effect='border-draw'] {
+	position: relative;
+}
+
+.oblique-button[data-ob-effect='border-draw']:hover {
+	opacity: 1;
+}
+
+.oblique-button[data-ob-effect='border-draw']::before,
+.oblique-button[data-ob-effect='border-draw']::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	transition: transform var(--ob-fx-duration) var(--ob-fx-easing);
+}
+
+.oblique-button[data-ob-effect='border-draw']::before {
+	border-top: var(--ob-fx-draw-thickness, 2px) solid var(--ob-fx-draw-color, currentColor);
+	border-bottom: var(--ob-fx-draw-thickness, 2px) solid var(--ob-fx-draw-color, currentColor);
+	transform: scaleX(0);
+}
+
+.oblique-button[data-ob-effect='border-draw']::after {
+	border-left: var(--ob-fx-draw-thickness, 2px) solid var(--ob-fx-draw-color, currentColor);
+	border-right: var(--ob-fx-draw-thickness, 2px) solid var(--ob-fx-draw-color, currentColor);
+	transform: scaleY(0);
+}
+
+.oblique-button[data-ob-effect='border-draw']:hover::before,
+.oblique-button[data-ob-effect='border-draw']:hover::after,
+.oblique-button[data-ob-effect='border-draw']:focus-visible::before,
+.oblique-button[data-ob-effect='border-draw']:focus-visible::after {
+	transform: scale(1);
+}
+
+/* -----------------------------------------------------------------------
+ * Surface: Glass
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-surface='glass'] {
+	background: var(--ob-surface-tint, rgba(255, 255, 255, 0.18));
+	-webkit-backdrop-filter: blur(var(--ob-surface-blur, 10px));
+	backdrop-filter: blur(var(--ob-surface-blur, 10px));
+	border: 1px solid var(--ob-surface-border-color, rgba(255, 255, 255, 0.35));
+	box-shadow: 0 8px 32px rgba(17, 24, 39, 0.12);
+}
+
+/* -----------------------------------------------------------------------
+ * Surface: Gradient border
+ *
+ * Uses two backgrounds and background-clip so the gradient sits only in
+ * the border area, which keeps the button's own background paintable.
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-surface='gradient-border'] {
+	border: var(--ob-surface-border-width, 2px) solid transparent;
+	background-image: linear-gradient(
+			var(--ob-surface-inner-color, #ffffff),
+			var(--ob-surface-inner-color, #ffffff)
+		),
+		linear-gradient(
+			var(--ob-surface-gradient-angle, 135deg),
+			var(--ob-surface-gradient-from, #6366f1),
+			var(--ob-surface-gradient-to, #ec4899)
+		);
+	background-origin: border-box;
+	background-clip: padding-box, border-box;
+}
+
+/* -----------------------------------------------------------------------
+ * Surface: Neumorphic
+ * --------------------------------------------------------------------- */
+
+.oblique-button[data-ob-surface='neumorphic'] {
+	background: var(--ob-surface-neu-bg, #e0e5ec);
+	border: 0;
+	box-shadow: var(--ob-surface-neu-distance, 6px) var(--ob-surface-neu-distance, 6px)
+			var(--ob-surface-neu-blur, 12px) var(--ob-surface-neu-dark, rgba(163, 177, 198, 0.7)),
+		calc(var(--ob-surface-neu-distance, 6px) * -1) calc(var(--ob-surface-neu-distance, 6px) * -1)
+			var(--ob-surface-neu-blur, 12px) var(--ob-surface-neu-light, #ffffff);
+}
+
+.oblique-button[data-ob-surface='neumorphic']:active {
+	box-shadow: inset var(--ob-surface-neu-distance, 6px) var(--ob-surface-neu-distance, 6px)
+			var(--ob-surface-neu-blur, 12px) var(--ob-surface-neu-dark, rgba(163, 177, 198, 0.7)),
+		inset calc(var(--ob-surface-neu-distance, 6px) * -1)
+			calc(var(--ob-surface-neu-distance, 6px) * -1) var(--ob-surface-neu-blur, 12px)
+			var(--ob-surface-neu-light, #ffffff);
+}
+
+/* -----------------------------------------------------------------------
+ * Reduced motion
+ *
+ * Effects that convey state (fill, underline, border draw) still resolve
+ * to their hovered end state - they just arrive instantly instead of
+ * animating. Purely decorative motion (shine, pulse) is suppressed.
+ * --------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.oblique-button[data-ob-effect]::before,
+	.oblique-button[data-ob-effect]::after,
+	.oblique-button[data-ob-effect] {
+		transition: none !important;
+		animation: none !important;
+	}
+
+	.oblique-button[data-ob-effect='shine']::after {
+		display: none;
+	}
+}

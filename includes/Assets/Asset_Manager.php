@@ -18,6 +18,8 @@ class Asset_Manager {
 
 	public const STYLE_HANDLE            = 'oblique-buttons';
 	public const ANIMATIONS_STYLE_HANDLE = 'oblique-buttons-animations';
+	public const EFFECTS_STYLE_HANDLE    = 'oblique-buttons-effects';
+	public const GROUP_STYLE_HANDLE      = 'oblique-buttons-group';
 
 	public function register(): void {
 		add_action( 'elementor/frontend/after_register_styles', array( $this, 'register_styles' ) );
@@ -34,6 +36,20 @@ class Asset_Manager {
 		wp_register_style(
 			self::ANIMATIONS_STYLE_HANDLE,
 			OBLIQUE_BUTTONS_URL . 'assets/css/animations.css',
+			array( self::STYLE_HANDLE ),
+			OBLIQUE_BUTTONS_VERSION
+		);
+
+		wp_register_style(
+			self::EFFECTS_STYLE_HANDLE,
+			OBLIQUE_BUTTONS_URL . 'assets/css/effects.css',
+			array( self::STYLE_HANDLE ),
+			OBLIQUE_BUTTONS_VERSION
+		);
+
+		wp_register_style(
+			self::GROUP_STYLE_HANDLE,
+			OBLIQUE_BUTTONS_URL . 'assets/css/button-group.css',
 			array( self::STYLE_HANDLE ),
 			OBLIQUE_BUTTONS_VERSION
 		);

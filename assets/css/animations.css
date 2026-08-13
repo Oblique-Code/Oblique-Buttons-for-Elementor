@@ -85,3 +85,17 @@
 		animation: none !important;
 	}
 }
+
+/* Custom transform
+ *
+ * Composed from individual variables so each axis has its own control
+ * while still producing one valid `transform` value. Each falls back to
+ * an identity value, so an untouched control contributes nothing. */
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button[data-ob-hover-fx='custom']:hover {
+		transform: translate(var(--ob-tf-x, 0px), var(--ob-tf-y, 0px))
+			scale(var(--ob-tf-scale, 1))
+			rotate(var(--ob-tf-rotate, 0deg))
+			skewX(var(--ob-tf-skew, 0deg));
+	}
+}

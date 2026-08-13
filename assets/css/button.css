@@ -62,13 +62,17 @@ button.oblique-button::-moz-focus-inner {
 	padding: 0;
 }
 
-/* Generic fallback interactivity when neither a preset nor a user control
-   has defined explicit hover/active styling for this instance. */
-.oblique-button:hover {
+/* Fallback interactivity for a button with no preset at all.
+ *
+ * Scoped away from presets on purpose: a blanket opacity fade is a poor
+ * hover for a designed surface (it visibly washes out glass, neumorphic
+ * and gradient-border), so every preset defines its own deliberate hover
+ * state instead and only a bare button falls back to this. */
+.oblique-button:not([class*='--preset-']):hover {
 	opacity: 0.92;
 }
 
-.oblique-button:active {
+.oblique-button:not([class*='--preset-']):active {
 	opacity: 0.85;
 }
 
@@ -134,6 +138,8 @@ button.oblique-button::-moz-focus-inner {
  * Anything left unset falls back to the defaults above.
  * --------------------------------------------------------------------- */
 
+/* --- Solid --------------------------------------------------------- */
+
 .oblique-button--preset-primary {
 	--ob-btn-bg: #1578ed;
 	--ob-btn-color: #ffffff;
@@ -170,6 +176,15 @@ button.oblique-button::-moz-focus-inner {
 	opacity: 1;
 }
 
+.oblique-button--preset-success {
+	--ob-btn-bg: #15a34a;
+	--ob-btn-color: #ffffff;
+}
+.oblique-button--preset-success:hover {
+	background: #12813c;
+	opacity: 1;
+}
+
 .oblique-button--preset-gradient {
 	--ob-btn-color: #ffffff;
 	background-image: linear-gradient(135deg, #6366f1, #ec4899);
@@ -179,6 +194,8 @@ button.oblique-button::-moz-focus-inner {
 	filter: brightness(0.92);
 	opacity: 1;
 }
+
+/* --- Outline ------------------------------------------------------- */
 
 .oblique-button--preset-outline {
 	--ob-btn-bg: transparent;
@@ -205,14 +222,51 @@ button.oblique-button::-moz-focus-inner {
 	opacity: 1;
 }
 
-.oblique-button--preset-pill {
-	--ob-btn-bg: #1578ed;
-	--ob-btn-color: #ffffff;
-	--ob-btn-radius: 999px;
+.oblique-button--preset-thick-border {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #111827;
+	--ob-btn-border-color: #111827;
+	--ob-btn-border-width: 4px;
+	--ob-btn-radius: 4px;
 }
-.oblique-button--preset-pill:hover {
-	background: #1264c7;
+.oblique-button--preset-thick-border:hover {
+	background: #111827;
+	color: #ffffff;
 	opacity: 1;
+}
+
+.oblique-button--preset-minimal-outline {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #4b5563;
+	--ob-btn-border-color: #d1d5db;
+	--ob-btn-border-width: 1px;
+	--ob-btn-radius: 6px;
+}
+.oblique-button--preset-minimal-outline:hover {
+	border-color: #4b5563;
+	color: #111827;
+	opacity: 1;
+}
+
+.oblique-button--preset-animated-border {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #1578ed;
+	--ob-btn-border-color: rgba(21, 120, 237, 0.25);
+	--ob-btn-border-width: 2px;
+	--ob-fx-draw-color: #1578ed;
+}
+
+/* --- Modern -------------------------------------------------------- */
+
+.oblique-button--preset-glass {
+	--ob-btn-color: #111827;
+	--ob-surface-tint: rgba(255, 255, 255, 0.55);
+	--ob-surface-blur: 12px;
+	--ob-surface-border-color: rgba(255, 255, 255, 0.85);
+}
+.oblique-button--preset-glass:hover {
+	--ob-surface-tint: rgba(255, 255, 255, 0.78);
+	box-shadow: 0 10px 30px rgba(17, 24, 39, 0.16);
 }
 
 .oblique-button--preset-soft-shadow {
@@ -225,6 +279,89 @@ button.oblique-button::-moz-focus-inner {
 	opacity: 1;
 }
 
+.oblique-button--preset-floating {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	box-shadow: 0 12px 20px -6px rgba(21, 120, 237, 0.55);
+}
+.oblique-button--preset-floating:hover {
+	box-shadow: 0 18px 28px -8px rgba(21, 120, 237, 0.65);
+	opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button--preset-floating {
+		transition-property: background, color, border-color, box-shadow, transform, opacity;
+	}
+	.oblique-button--preset-floating:hover {
+		transform: translateY(-3px);
+	}
+}
+
+.oblique-button--preset-pill {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 999px;
+}
+.oblique-button--preset-pill:hover {
+	background: #1264c7;
+	opacity: 1;
+}
+
+.oblique-button--preset-neumorphic {
+	--ob-btn-color: #4b5563;
+	--ob-surface-neu-bg: #e0e5ec;
+	--ob-btn-radius: 14px;
+}
+.oblique-button--preset-neumorphic:hover {
+	--ob-surface-neu-distance: 3px;
+	--ob-surface-neu-blur: 8px;
+	color: #1f2937;
+}
+
+.oblique-button--preset-gradient-border {
+	--ob-btn-color: #6366f1;
+	--ob-surface-inner-color: #ffffff;
+	--ob-surface-gradient-from: #6366f1;
+	--ob-surface-gradient-to: #ec4899;
+	--ob-surface-border-width: 2px;
+}
+.oblique-button--preset-gradient-border:hover {
+	--ob-surface-inner-color: transparent;
+	color: #ffffff;
+}
+
+/* --- Animated ------------------------------------------------------ */
+
+.oblique-button--preset-slide-background {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+	--ob-fx-fill-color: #1578ed;
+}
+
+.oblique-button--preset-fill-left {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #1578ed;
+	--ob-btn-border-color: #1578ed;
+	--ob-btn-border-width: 2px;
+	--ob-fx-fill-color: #1578ed;
+	--ob-fx-fill-text-color: #ffffff;
+}
+
+.oblique-button--preset-fill-right {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #111827;
+	--ob-btn-border-color: #111827;
+	--ob-btn-border-width: 2px;
+	--ob-fx-fill-color: #111827;
+	--ob-fx-fill-text-color: #ffffff;
+}
+
+.oblique-button--preset-shine {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	--ob-fx-shine-color: rgba(255, 255, 255, 0.45);
+}
+
 .oblique-button--preset-arrow-reveal {
 	--ob-btn-bg: #111827;
 	--ob-btn-color: #ffffff;
@@ -233,44 +370,118 @@ button.oblique-button::-moz-focus-inner {
 	background: #000000;
 	opacity: 1;
 }
-.oblique-button--preset-arrow-reveal:hover .oblique-button__icon {
-	transform: translateX(4px);
-}
 
-.oblique-button--preset-shine {
+.oblique-button--preset-icon-slide {
 	--ob-btn-bg: #1578ed;
 	--ob-btn-color: #ffffff;
-	position: relative;
-	overflow: hidden;
-	isolation: isolate;
+	--ob-btn-radius: 999px;
 }
-.oblique-button--preset-shine:hover {
+.oblique-button--preset-icon-slide:hover {
+	background: #1264c7;
 	opacity: 1;
-}
-.oblique-button--preset-shine::after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: -75%;
-	width: 50%;
-	height: 100%;
-	background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-	transform: skewX(-20deg);
-	transition: left 0.6s ease;
-}
-.oblique-button--preset-shine:hover::after {
-	left: 125%;
 }
 
 .oblique-button--preset-border-draw {
 	--ob-btn-bg: transparent;
 	--ob-btn-color: #1578ed;
-	--ob-btn-border-color: rgba(21, 120, 237, 0.3);
+	--ob-btn-border-color: rgba(21, 120, 237, 0.25);
 	--ob-btn-border-width: 2px;
+	--ob-fx-draw-color: #1578ed;
 }
-.oblique-button--preset-border-draw:hover {
-	border-color: #1578ed;
+
+/* --- Creative ------------------------------------------------------ */
+
+.oblique-button--preset-skew {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 2px;
+	transform: skewX(-10deg);
+}
+.oblique-button--preset-skew .oblique-button__text,
+.oblique-button--preset-skew .oblique-button__icon {
+	transform: skewX(10deg);
+}
+.oblique-button--preset-skew:hover {
+	background: #1578ed;
 	opacity: 1;
+}
+
+.oblique-button--preset-underline {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #111827;
+	--ob-btn-padding-y: 8px;
+	--ob-btn-padding-x: 4px;
+	--ob-btn-radius: 0px;
+	--ob-fx-underline-color: currentColor;
+}
+
+.oblique-button--preset-split-color {
+	--ob-btn-color: #ffffff;
+	background-image: linear-gradient(100deg, #1578ed 0 50%, #111827 50% 100%);
+	border: 0;
+}
+.oblique-button--preset-split-color:hover {
+	background-image: linear-gradient(100deg, #111827 0 50%, #1578ed 50% 100%);
+	opacity: 1;
+}
+
+.oblique-button--preset-corner-accent {
+	--ob-btn-bg: #ffffff;
+	--ob-btn-color: #111827;
+	--ob-btn-border-color: #111827;
+	--ob-btn-border-width: 2px;
+	--ob-btn-radius: 0px;
+	position: relative;
+	overflow: hidden;
+}
+.oblique-button--preset-corner-accent::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 14px;
+	height: 14px;
+	background: var(--ob-btn-accent-color, #1578ed);
+	clip-path: polygon(100% 0, 0 0, 100% 100%);
+	transition: width var(--ob-btn-transition-duration) ease,
+		height var(--ob-btn-transition-duration) ease;
+}
+.oblique-button--preset-corner-accent:hover::before {
+	width: 26px;
+	height: 26px;
+}
+.oblique-button--preset-corner-accent:hover {
+	opacity: 1;
+}
+
+.oblique-button--preset-dual-tone {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 8px;
+	border-bottom: 4px solid var(--ob-btn-dual-tone-color, #0c4a94);
+}
+.oblique-button--preset-dual-tone:hover {
+	background: #1264c7;
+	opacity: 1;
+}
+
+.oblique-button--preset-morph {
+	--ob-btn-bg: #6366f1;
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 8px;
+}
+.oblique-button--preset-morph:hover {
+	background: #ec4899;
+	opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button--preset-morph {
+		transition-property: background, color, border-color, box-shadow, transform, opacity,
+			border-radius;
+	}
+	.oblique-button--preset-morph:hover {
+		border-radius: 999px;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -279,4 +490,248 @@ button.oblique-button::-moz-focus-inner {
 	.oblique-button::after {
 		transition: none !important;
 	}
+}
+
+/* --- Signature -------------------------------------------------------
+ *
+ * The motion-led designs. These lean on an accent color
+ * (`--ob-btn-accent`, exposed as a control) and, where noted, on the
+ * icon wrapper span so the icon can be treated as its own badge.
+ * ------------------------------------------------------------------- */
+
+.oblique-button--preset-icon-orbit {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+	--ob-btn-accent: #1578ed;
+	--ob-btn-radius: 999px;
+	--ob-btn-padding-y: 6px;
+	--ob-btn-padding-x: 6px;
+	--ob-btn-icon-gap: 12px;
+}
+.oblique-button--preset-icon-orbit .oblique-button__text {
+	padding-inline: 12px;
+}
+.oblique-button--preset-icon-orbit .oblique-button__icon {
+	width: 2.3em;
+	height: 2.3em;
+	border-radius: 999px;
+	background: var(--ob-btn-accent);
+	color: #ffffff;
+	transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1), background 0.3s ease;
+}
+.oblique-button--preset-icon-orbit:hover {
+	background: #000000;
+}
+.oblique-button--preset-icon-orbit:hover .oblique-button__icon {
+	transform: rotate(360deg);
+}
+
+.oblique-button--preset-icon-capsule {
+	--ob-btn-bg: #f3f4f6;
+	--ob-btn-color: #111827;
+	--ob-btn-accent: #1578ed;
+	--ob-btn-radius: 999px;
+	--ob-btn-padding-y: 5px;
+	--ob-btn-padding-x: 5px;
+	--ob-btn-icon-gap: 14px;
+}
+.oblique-button--preset-icon-capsule .oblique-button__text {
+	padding-inline: 14px;
+}
+.oblique-button--preset-icon-capsule .oblique-button__icon {
+	width: 2.4em;
+	height: 2.4em;
+	border-radius: 999px;
+	background: var(--ob-btn-accent);
+	color: #ffffff;
+}
+.oblique-button--preset-icon-capsule:hover {
+	background: #e5e7eb;
+}
+.oblique-button--preset-icon-capsule:hover .oblique-button__icon {
+	transform: translateX(4px) scale(1.08);
+}
+
+.oblique-button--preset-arrow-launch {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+	--ob-btn-accent: #1578ed;
+	--ob-btn-radius: 6px;
+	overflow: hidden;
+}
+.oblique-button--preset-arrow-launch:hover {
+	background: var(--ob-btn-accent);
+}
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button--preset-arrow-launch {
+		transition-property: background, color, border-color, box-shadow, transform, border-radius;
+	}
+	.oblique-button--preset-arrow-launch:hover {
+		border-radius: 999px;
+	}
+	.oblique-button--preset-arrow-launch:hover .oblique-button__icon {
+		animation: ob-launch 0.45s ease forwards;
+	}
+	@keyframes ob-launch {
+		40% {
+			transform: translateX(140%);
+			opacity: 0;
+		}
+		41% {
+			transform: translateX(-140%);
+			opacity: 0;
+		}
+		100% {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+}
+
+.oblique-button--preset-icon-tilt {
+	--ob-btn-bg: #ffffff;
+	--ob-btn-color: #111827;
+	--ob-btn-accent: #6366f1;
+	--ob-btn-border-color: #e5e7eb;
+	--ob-btn-border-width: 1px;
+	--ob-btn-radius: 12px;
+}
+.oblique-button--preset-icon-tilt:hover {
+	border-color: var(--ob-btn-accent);
+	color: var(--ob-btn-accent);
+}
+.oblique-button--preset-icon-tilt:hover .oblique-button__icon {
+	transform: rotate(-18deg) scale(1.18);
+	color: var(--ob-btn-accent);
+}
+
+.oblique-button--preset-radius-morph {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+	--ob-btn-accent: #1578ed;
+	--ob-btn-radius: 2px;
+}
+.oblique-button--preset-radius-morph:hover {
+	background: var(--ob-btn-accent);
+}
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button--preset-radius-morph {
+		transition-property: background, color, border-color, box-shadow, transform, border-radius;
+		transition-duration: 0.45s;
+	}
+	.oblique-button--preset-radius-morph:hover {
+		border-radius: 999px;
+	}
+}
+
+.oblique-button--preset-hard-shadow {
+	--ob-btn-bg: #fde047;
+	--ob-btn-color: #111827;
+	--ob-btn-accent: #111827;
+	--ob-btn-radius: 4px;
+	--ob-btn-border-color: var(--ob-btn-accent);
+	--ob-btn-border-width: 2px;
+	box-shadow: 5px 5px 0 0 var(--ob-btn-accent);
+}
+.oblique-button--preset-hard-shadow:hover {
+	box-shadow: 2px 2px 0 0 var(--ob-btn-accent);
+	transform: translate(3px, 3px);
+}
+.oblique-button--preset-hard-shadow:active {
+	box-shadow: 0 0 0 0 var(--ob-btn-accent);
+	transform: translate(5px, 5px);
+}
+
+.oblique-button--preset-glow-ring {
+	--ob-btn-bg: #1578ed;
+	--ob-btn-color: #ffffff;
+	--ob-btn-accent: rgba(21, 120, 237, 0.35);
+	--ob-btn-radius: 999px;
+	box-shadow: 0 0 0 0 var(--ob-btn-accent);
+}
+.oblique-button--preset-glow-ring:hover {
+	box-shadow: 0 0 0 7px var(--ob-btn-accent);
+}
+
+.oblique-button--preset-gradient-sweep {
+	--ob-btn-color: #ffffff;
+	--ob-btn-radius: 10px;
+	border: 0;
+	background-image: linear-gradient(100deg, #6366f1, #ec4899, #f59e0b, #6366f1);
+	background-size: 300% 100%;
+	background-position: 0% 50%;
+	transition: background-position 0.7s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.oblique-button--preset-gradient-sweep:hover {
+	background-position: 100% 50%;
+}
+
+.oblique-button--preset-spotlight {
+	--ob-btn-bg: #111827;
+	--ob-btn-color: #ffffff;
+	--ob-btn-accent: rgba(255, 255, 255, 0.22);
+	--ob-btn-radius: 10px;
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+}
+.oblique-button--preset-spotlight::before {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	inset: 0;
+	background: radial-gradient(circle at 50% 50%, var(--ob-btn-accent) 0%, transparent 62%);
+	transform: scale(0);
+	transition: transform 0.5s ease;
+}
+.oblique-button--preset-spotlight:hover::before {
+	transform: scale(2.4);
+}
+
+.oblique-button--preset-stroke-grow {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #111827;
+	--ob-btn-accent: #111827;
+	--ob-btn-radius: 8px;
+	box-shadow: inset 0 0 0 1px var(--ob-btn-accent);
+}
+.oblique-button--preset-stroke-grow:hover {
+	box-shadow: inset 0 0 0 5px var(--ob-btn-accent);
+}
+
+.oblique-button--preset-elevate {
+	--ob-btn-bg: #ffffff;
+	--ob-btn-color: #111827;
+	--ob-btn-accent: rgba(17, 24, 39, 0.16);
+	--ob-btn-radius: 12px;
+	box-shadow: 0 2px 6px rgba(17, 24, 39, 0.1);
+}
+.oblique-button--preset-elevate:hover {
+	box-shadow: 0 16px 30px -10px var(--ob-btn-accent);
+}
+@media (prefers-reduced-motion: no-preference) {
+	.oblique-button--preset-elevate:hover {
+		transform: translateY(-4px) scale(1.02);
+	}
+}
+
+.oblique-button--preset-letter-track {
+	--ob-btn-bg: transparent;
+	--ob-btn-color: #111827;
+	--ob-btn-accent: #111827;
+	--ob-btn-radius: 0px;
+	--ob-btn-padding-x: 6px;
+	/* Set as longhands, not through --ob-btn-border-width: the base rule
+	   feeds that token into the `border` shorthand, which only accepts a
+	   single width, so a four-value token there invalidates the whole
+	   declaration and the button renders a full box instead. */
+	border: 0;
+	border-bottom: 2px solid var(--ob-btn-accent);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	transition: letter-spacing 0.35s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.oblique-button--preset-letter-track:hover {
+	letter-spacing: 0.24em;
+	color: var(--ob-btn-accent);
 }
